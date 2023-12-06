@@ -37,7 +37,7 @@ public class OptionService {
 
     public Long addOption(OptionResponse.FindByProductIdDTO optionResponseFind) {
         Product product = productRepository.findById(optionResponseFind.getProductId()).orElseThrow(
-                () -> new Exception404("해당 상품을 찾을 수 없습니다 :" + optionResponseFind.getProductId()) );
+                () -> new Exception404("해당 상품을 찾을 수 없습니다. :" + optionResponseFind.getProductId()) );
 
         Option option = optionResponseFind.toEntity(product);
         optionRepository.save(option);
@@ -46,10 +46,10 @@ public class OptionService {
 
     public void updateOption(Long optionId, OptionResponse.FindByProductIdDTO optionInfo) {
         Option option = optionRepository.findById(optionId).orElseThrow(
-                () -> new Exception404("해당 옵션을 찾을 수 없습니다 : " + optionId));
+                () -> new Exception404("해당 옵션을 찾을 수 없습니다. : " + optionId));
 
         Product product = productRepository.findById(optionInfo.getProductId()).orElseThrow(
-                () -> new Exception404("해당 옵션을 찾을 수 없습니다 :  " + optionInfo.getProductId()));
+                () -> new Exception404("해당 옵션을 찾을 수 없습니다. :  " + optionInfo.getProductId()));
 
         option.update(optionInfo, product);
         optionRepository.save(option);
@@ -57,10 +57,10 @@ public class OptionService {
 
     public void deleteOption(Long productId, Long optionId) {
         Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new Exception404("Product not found with id: " + productId));
+                .orElseThrow(() -> new Exception404("해당 상품을 찾을 수 없습니다. : " + productId));
 
         Option option = optionRepository.findByIdAndProduct(optionId, product)
-                .orElseThrow(() -> new Exception404("Option not found with id: " + optionId + " for product id: " + productId));
+                .orElseThrow(() -> new Exception404("해당 옵션을 찾을 수 없습니다. : " + optionId + " 속한 상품 ID : " + productId));
 
         optionRepository.delete(option);
     }

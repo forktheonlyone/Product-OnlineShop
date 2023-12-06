@@ -34,7 +34,7 @@ public class ProductService {
     // 개별 상품 검색
     public ProductResponse.FindByIdDTO findById(Long id) {
         Product product = productRepository.findById(id).orElseThrow(
-                () -> new Exception404("해당 상품을 찾을 수 없습니다." + id) );
+                () -> new Exception404("해당 상품을 찾을 수 없습니다. : " + id) );
 
         // product.getId() 로 Option 상품을 검색.
         List<Option> optionList = optionRepository.findByProductId(product.getId());
@@ -51,7 +51,7 @@ public class ProductService {
     @Transactional
     public void update(Long id, ProductResponse productResponse) {
         Product existingProduct = productRepository.findById(id).orElseThrow(
-                () -> new Exception404("해당 상품을 찾을 수 없습니다." + id) );
+                () -> new Exception404("해당 상품을 찾을 수 없습니다. : " + id) );
 
         Product updatedProduct = productResponse.updateToEntity(id);
 
@@ -60,7 +60,7 @@ public class ProductService {
 
     public Product findProductById(Long id){
         return productRepository.findById(id).orElseThrow(
-                () -> new Exception404("해당 상품을 찾을 수 없습니다." + id) );
+                () -> new Exception404("해당 상품을 찾을 수 없습니다. : " + id) );
     }
 
     @Transactional
