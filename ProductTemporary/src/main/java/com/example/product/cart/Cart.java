@@ -11,6 +11,14 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Getter
 @Entity
+@Table(name = "cart_tb",
+        indexes = {
+                @Index(name = "cart_user_id_idx", columnList = "user_id"),
+                @Index(name = "cart_option_id_idx", columnList = "option_id"),
+        },
+        uniqueConstraints = {
+            @UniqueConstraint(name = "uk_cart_option_user", columnNames = {"user_id", "option_id"})
+        })
 public class Cart {
 
     @Id

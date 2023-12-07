@@ -5,10 +5,12 @@ import com.example.product.products.Product;
 import com.example.product.products.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
 public class OptionService {
@@ -35,6 +37,7 @@ public class OptionService {
         return findAllDTOS;
     }
 
+    @Transactional
     public Long addOption(OptionResponse.FindByProductIdDTO optionResponseFind) {
         Product product = productRepository.findById(optionResponseFind.getProductId()).orElseThrow(
                 () -> new Exception404("해당 상품을 찾을 수 없습니다. :" + optionResponseFind.getProductId()) );
@@ -44,6 +47,7 @@ public class OptionService {
         return option.getId();
     }
 
+    @Transactional
     public void updateOption(Long optionId, OptionResponse.FindByProductIdDTO optionInfo) {
         Option option = optionRepository.findById(optionId).orElseThrow(
                 () -> new Exception404("해당 옵션을 찾을 수 없습니다. : " + optionId));
@@ -55,6 +59,7 @@ public class OptionService {
         optionRepository.save(option);
     }
 
+    @Transactional
     public void deleteOption(Long productId, Long optionId) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new Exception404("해당 상품을 찾을 수 없습니다. : " + productId));

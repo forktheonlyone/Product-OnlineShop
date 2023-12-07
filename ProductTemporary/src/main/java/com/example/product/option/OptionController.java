@@ -15,9 +15,9 @@ public class OptionController {
 
     // 개별 옵션 검색
     /**
-    * @param id
+     * @param id
      * id 에 관련된 설명 (ProductId)
-    * @return
+     * @return
      * {@code List<OptionResponse.FindByProductIdDTO>} 리스트로 반환.
      */
     @GetMapping("/product/{id}/options")

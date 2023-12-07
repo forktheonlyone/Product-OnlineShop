@@ -10,11 +10,10 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Getter
 @Entity
-@Table(name = "option_db",
+@Table(name = "option_tb",
         indexes = {
             @Index(name = "option_product_id_index", columnList = "product_id")
         })
-
 public class Option {
 
     @Id

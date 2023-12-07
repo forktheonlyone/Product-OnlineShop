@@ -55,10 +55,12 @@ public class UserController {
 
         String jwt = "";
 
+        // 인증 작업
         try{
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken
                     = new UsernamePasswordAuthenticationToken(requestDTO.getEmail(), requestDTO.getPassword());
 
+            // anonymousUser = 비인증
             Authentication authentication =  authenticationManager.authenticate(
                     usernamePasswordAuthenticationToken
             );
