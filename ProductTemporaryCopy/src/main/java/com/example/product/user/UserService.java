@@ -9,10 +9,16 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
@@ -37,6 +43,31 @@ public class UserService {
     public User register(UserRequest.JoinDTO joinDTO, String kakaoId) {
         User newUser = joinDTO.toEntity(kakaoId);
         return save(newUser);
+    }
+
+    public void authenticateWithKakaoToken(String kakaoToken) throws JsonProcessingException {
+        // 카카오 토큰을 이용해 사용자 정보를 받아옵니다.
+        KakaoInfo kakaoInfo = getUserInfo(kakaoToken);
+
+        // 카카오 ID를 이용해 우리 서버에서 사용자를 조회합니다.
+        Optional<User> userOptional = findByKakaoId(kakaoInfo.getId());
+
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+
+            // 사용자 정보를 이용해 Spring Security 인증 토큰을 생성합니다.
+            Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+
+            // 인증 토큰을 SecurityContext에 저장합니다.
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        } else {
+            // 사용자를 찾을 수 없는 경우, 적절한 예외를 던집니다.
+            throw new ResponseStatusException(
+                    HttpStatus.SEE_OTHER,
+                    "사이트에 동록된 사용자 정보를 찾을 수 없습니다. 회원가입을 진행해주세요."
+            );
+        }
     }
 
 

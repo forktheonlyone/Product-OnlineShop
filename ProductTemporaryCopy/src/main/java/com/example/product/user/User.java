@@ -3,16 +3,18 @@ package com.example.product.user;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor
 @Entity
-@Table(name="user_tb")
+//@Table(name="user_tb")
 public class User {
 
     @Id
@@ -22,7 +24,7 @@ public class User {
     @Column(length = 100, nullable = false)
     private String password;
 
-    @Column(length = 255, nullable = false, unique = true)
+    @Column(length = 255, nullable = true, unique = true)
     private String kakaoId;
 
     @Column(length = 100, nullable = false, unique = true)
@@ -34,7 +36,7 @@ public class User {
     @Column(length = 255, nullable = true)
     private String address;
 
-    @Column(length = 11, nullable = false)
+    @Column(length = 11, nullable = true)
     private String phoneNumber;
 
     @Convert(converter = StringArrayConverter.class)
@@ -49,6 +51,12 @@ public class User {
         this.userName = userName;
         this.address = address;
         this.phoneNumber = phoneNumber;
-        this.roles = roles;
+        this.roles = roles == null || roles.isEmpty() ? Collections.singletonList("ROLE_USER") : roles;
+    }
+
+    public List<SimpleGrantedAuthority> getAuthorities() {
+        return roles.stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
     }
 }

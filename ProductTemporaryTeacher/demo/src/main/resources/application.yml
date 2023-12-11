@@ -1,5 +1,10 @@
 server:
   port: 8080
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
 
 spring:
   servlet:
@@ -20,11 +25,14 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: create
+      connection:
+        charSet: UTF_8
 
     properties:
       hibernate:
-         hbm2ddl:
-           import_files: classpath:db/data.sql
+        hbm2ddl:
+          import_files: classpath:db/data.sql
+
   h2:
     console:
       enabled: true

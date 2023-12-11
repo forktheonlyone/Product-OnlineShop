@@ -39,6 +39,10 @@ public class UserController {
                 ApiUtils.ApiResult<?> apiResult = ApiUtils.success(user);
                 return ResponseEntity.ok(apiResult);
             }
+            /*
+            String endcodedPassword =  passwordEncoder.encode(requestDTO.getPassword());
+            requestDTO.
+             */
         }
         ApiUtils.ApiResult<?> apiResult = ApiUtils.success("login");
         return ResponseEntity.ok(apiResult);
